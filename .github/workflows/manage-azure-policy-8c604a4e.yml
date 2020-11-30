@@ -1,0 +1,40 @@
+name: manage-azure-policy-8c604a4e
+on:
+  workflow_dispatch:
+    inputs:
+      remarks:
+        description: 'Reason for triggering the workflow run'
+        required: false
+        default: 'Updating Azure Policies'
+
+
+## Uncomment the following if you wish to automatically trigger workflow run with every commit
+#
+#  push:
+#    paths:
+#      - 'policies/Deny_Generic_Rule_to_Allow_SSH_Connections_Deny-Generic-NSG-Rule-SSH-Protocol/**'
+#      - 'policies/Deny_Generic_Rule_to_Allow_RDP_Connections_Deny-Generic-NSG-Rule-RDP-Protocol/**'
+#      - 'policies/Deny_Generic_Rule_to_Allow_All_Connections_Deny-Generic-NSG-Rule-All/**'
+#      - 'policies/Allowed_virtual_machine_size_SKUs_cccc23c7-8427-4f53-ad12-b6a63eb452b3/**'
+#      - 'policies/Not_allowed_resource_types_6c112d4e-5bc7-47ae-a041-ea2d9dccd749/**'
+#      - .github/workflows/manage-azure-policy-8c604a4e.yml
+jobs:
+  apply-azure-policy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_8c604a4e}}
+        allow-no-subscriptions: true
+    - name: Create or Update Azure Policies
+      uses: azure/manage-azure-policy@v0
+      with:
+        paths: |
+          policies/Deny_Generic_Rule_to_Allow_SSH_Connections_Deny-Generic-NSG-Rule-SSH-Protocol/**
+          policies/Deny_Generic_Rule_to_Allow_RDP_Connections_Deny-Generic-NSG-Rule-RDP-Protocol/**
+          policies/Deny_Generic_Rule_to_Allow_All_Connections_Deny-Generic-NSG-Rule-All/**
+          policies/Allowed_virtual_machine_size_SKUs_cccc23c7-8427-4f53-ad12-b6a63eb452b3/**
+          policies/Not_allowed_resource_types_6c112d4e-5bc7-47ae-a041-ea2d9dccd749/**

@@ -1,0 +1,77 @@
+{
+ "properties": {
+  "displayName": "Deny Generic Rule to Allow All Connections",
+  "policyType": "Custom",
+  "mode": "All",
+  "description": "",
+  "metadata": {
+   "category": "Teevo-Custom",
+   "createdBy": "3244200d-af74-415a-a96c-b155dc5c7a58",
+   "createdOn": "2020-05-12T18:24:40.7124528Z",
+   "updatedBy": "3244200d-af74-415a-a96c-b155dc5c7a58",
+   "updatedOn": "2020-05-12T18:49:50.9777442Z"
+  },
+  "policyRule": {
+   "if": {
+    "allOf": [
+     {
+      "equals": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "field": "type"
+     },
+     {
+      "allOf": [
+       {
+        "equals": "Allow",
+        "field": "Microsoft.Network/networkSecurityGroups/securityRules/access"
+       },
+       {
+        "equals": "Inbound",
+        "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction"
+       },
+       {
+        "anyOf": [
+         {
+          "equals": "*",
+          "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange"
+         },
+         {
+          "not": {
+           "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+           "notEquals": "*"
+          }
+         }
+        ]
+       },
+       {
+        "anyOf": [
+         {
+          "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+          "in": [
+           "*",
+           "Internet"
+          ]
+         },
+         {
+          "not": {
+           "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefixes[*]",
+           "notIn": [
+            "*",
+            "Internet"
+           ]
+          }
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "then": {
+    "effect": "deny"
+   }
+  }
+ },
+ "id": "/subscriptions/d5b74a38-1a85-47a8-86a4-db358c50a937/providers/Microsoft.Authorization/policyDefinitions/Deny-Generic-NSG-Rule-All",
+ "type": "Microsoft.Authorization/policyDefinitions",
+ "name": "Deny-Generic-NSG-Rule-All"
+}
